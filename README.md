@@ -42,9 +42,10 @@ Traditional security measures for LLMs depend on pattern-matching, blocklists, a
 | Security Verdict      | <--- | Isolation Forest Classifier| <--- | Latent Feature Vector Space |
 | (Safe vs. Threat)     |      | (Anomaly Scoring Engine)  |      | (Numerical Vector Matrix)   |
 +-----------------------+      +---------------------------+      +-----------------------------+
+```
+---
 
-
-5. Technology Stack
+## 5. Technology Stack
 Machine Learning & Deep Learning: Python, PyTorch, Hugging Face Transformers, Scikit-Learn (IsolationForest, numpy).
 
 Backend & Serverless API: Python Standard Library (http.server), Vercel Serverless Functions, FastAPI (for local prototyping).
