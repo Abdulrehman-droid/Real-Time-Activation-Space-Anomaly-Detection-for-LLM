@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time-Activation-Space-Anomaly-Detection-for-LLM</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f8; margin: 0; padding: 40px 20px; color: #333; }
+        .container { max-width: 650px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { margin-top: 0; color: #111; }
+        p { color: #666; line-height: 1.5; }
+        textarea { width: 100%; height: 120px; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; resize: vertical; }
+        button { background-color: #0066cc; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        button:hover { background-color: #0052a3; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; display: none; }
+        .safe { background-color: #e6f4ea; border: 1px solid #ceebe1; color: #137333; }
+        .anomaly { background-color: #fce8e6; border: 1px solid #fad2cf; color: #c5221f; }
+        .error { background-color: #fef7e0; border: 1px solid #feefc3; color: #b06000; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Real-Time-Activation-Space-Anomaly-Detection-for-LLM</h1>
+    <p>Activation-Space Anomaly Detection for Large Language Model Prompts.</p>
+    <label for="promptInput">Enter Prompt to Inspect:</label>
+    <textarea id="promptInput" placeholder="Type prompt here..."></textarea>
+    <button onclick="analyzePrompt()">Analyze Latent Space</button>
+    <div id="resultBox" class="result"></div>
+</div>
+<script>
+async function analyzePrompt() {
+    const prompt = document.getElementById('promptInput').value.trim();
+    const resultBox = document.getElementById('resultBox');
+    if (!prompt) {
+        resultBox.className = 'result error';
+        resultBox.innerText = 'Please enter a prompt before submitting.';
+        resultBox.style.display = 'block';
+        return;
+    }
+    resultBox.style.display = 'none';
+    try {
+        const response = await fetch('/api', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: prompt })
+        });
+        const data = await response.json();
+        if (!response.ok) { throw new Error(data.error || 'Server error occurred.'); }
+        if (data.is_anomaly) {
+            resultBox.className = 'result anomaly';
+            resultBox.innerHTML = '<strong>Threat Detected:</strong> Anomalous prompt behavior in latent space.<br>Score: ' + data.score;
+        } else {
+            resultBox.className = 'result safe';
+            resultBox.innerHTML = '<strong>Safe Prompt:</strong> Normal activation profile detected.<br>Score: ' + data.score;
+        }
+        resultBox.style.display = 'block';
+    } catch (err) {
+        resultBox.className = 'result error';
+        resultBox.innerText = 'Error: ' + err.message;
+        resultBox.style.display = 'block';
+    }
+}
+</script>
+</body>
+</html>
