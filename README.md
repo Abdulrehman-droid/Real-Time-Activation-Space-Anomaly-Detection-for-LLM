@@ -42,3 +42,38 @@ Traditional security measures for LLMs depend on pattern-matching, blocklists, a
 | Security Verdict      | <--- | Isolation Forest Classifier| <--- | Latent Feature Vector Space |
 | (Safe vs. Threat)     |      | (Anomaly Scoring Engine)  |      | (Numerical Vector Matrix)   |
 +-----------------------+      +---------------------------+      +-----------------------------+
+
+
+5. Technology Stack
+Machine Learning & Deep Learning: Python, PyTorch, Hugging Face Transformers, Scikit-Learn (IsolationForest, numpy).
+
+Backend & Serverless API: Python Standard Library (http.server), Vercel Serverless Functions, FastAPI (for local prototyping).
+
+Frontend Interface: HTML5, CSS3, Vanilla JavaScript (responsive single-page dashboard).
+
+Deployment & CI/CD: Git, GitHub, Vercel Platform.
+
+## 6.Implementation & Deployment 
+
+### Step 1: Feature Extraction and Training (Google Colab)
+1. Load a pre-trained transformer tokenizer and base model (`distilbert-base-uncased`).
+2. Pass a curated corpus of benign prompts through the model with `output_hidden_states=True`.
+3. Extract and pool the hidden states from the final layer to construct a baseline training matrix X.
+4. Fit an unsupervised `IsolationForest` to learn normal boundary distributions and export model parameters (`model_config.json`).
+
+### Step 2: Serverless Inference API (`api/index.py`)
+1. Receive incoming HTTP POST requests containing user prompts.
+2. Evaluate prompt length, structural features, and known semantic anomaly indicators.
+3. Compute an anomaly score and return a structured JSON response (`is_anomaly`, `score`, `status`).
+
+### Step 3: Web Interface (`public/index.html`)
+1. Provide a clean, distraction-free text input area for operators to test prompts.
+2. Implement asynchronous JavaScript (`fetch`) to communicate with the serverless backend.
+3. Dynamically render threat alerts and safety verification badges based on real-time inference scores.
+
+### Step 4: Production Deployment (Vercel)
+1. Structure the repository into `api/`, `public/`, and configuration files (`vercel.json`, `requirements.txt`).
+2. Link the GitHub repository to Vercel for automated serverless deployments.
+
+
+
